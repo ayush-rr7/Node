@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/output.css" />
+  </head>
+  <body>
+    <header>
+       <%- include('../partials/nav')%>
+      <div id="taskbar">
+        <% if(isLoggedIn){ %>
+        
+       
+        <div class="max-w-6xl mx-auto px-4 py-10">
+      <h1 class="text-xl font-bold text-gray-600 mb-2">
+       Here you can contact property owners to book </h1>
+      <h2 class="text-4xl font-bold text-gray-800 mb-2">
+        Details of property owner :- 
+        <ul>
+       <li>Name: <%= users.firstName %>  <%= users.lastName %></li>
+       <li>Email:<%= users.email %></li>
+       <li></li>
+       </ul> </h2>
+         <% } %>
+       
+      </div>
+    </header>
+    
+  </body>
+</html>
