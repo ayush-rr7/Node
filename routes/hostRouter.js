@@ -1,13 +1,13 @@
 
 const express= require('express') ;
-// const path= require('path');
 const hostRouter = express.Router();
-// const rootDir = require('../utils/pathUtil');
+const {upload}= require("../config/upload");
+
 
 const hostController = require("../controllers/hostController");
 
 hostRouter.get("/add-home", hostController.getAddHome);
-hostRouter.post("/add-home", hostController.postAddHome);
+hostRouter.post("/add-home",upload.single('imageURL'), hostController.postAddHome);
 hostRouter.get("/home-list", hostController.getHostHomes);
 hostRouter.get("/edit-home/:homeId", hostController.getEditHome);
 hostRouter.post("/edit-home", hostController.postEditHome);

@@ -1,6 +1,7 @@
 const registeredHomes = [];
 const User = require("../models/user");
 const Home =require ("../models/home");
+// const {upload}= require("../upload");
 const fs=require("fs");
 
 
@@ -55,12 +56,12 @@ exports.getHostHomes = (req, res, next) => {
 
 
 exports.postAddHome = (req, res, next) => {
-
   const { name, price, city, description } =req.body;
   console.log(req.body);
-  if(!req.file){
-    return res.status(422).send("no image provided");
-  }
+  // upload.single("imageUrl")
+  // if(!req.file){
+  //   return res.status(422).send("no image provided");
+  // }
   const usersId= req.session.user._id;
   const imageURL = req.file.path;
   console.log(imageURL);

@@ -23,55 +23,56 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 const storeRouter= require("./routes/storeRouter");
 const {hostRouter}= require("./routes/hostRouter");
+// const home = require('./models/home');
 
 const rootDir =require("./utils/pathUtil");
-const home = require('./models/home');
-
-
 app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set('views',path.join(rootDir,'views'));
 
 const store =new MongoDBStore({
  uri: process.env.MONGODB_URI,
  collection:'sessions'
 });
 
-const randomString =(length)=>{
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let result ='';
-  for( let i=0;i<length; i++){
-    result+= characters.charAt(Math.floor(Math.random()
-    *characters.length));
-  }
-  return result;
-}
+// const randomString =(length)=>{
+//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+//   let result ='';
+//   for( let i=0;i<length; i++){
+//     result+= characters.charAt(Math.floor(Math.random()
+//     *characters.length));
+//   }
+//   return result;
+// }
 
+// const storage = multer.diskStorage({
+//    destination : (req,file,cb)=>{
+//     cb(null,"uploads/");
+//    },
+//    filename: (req,file,cb)=>{
+//     cb(null,randomString(4)+'__'+file.originalname);
+//    }
+// })
 
-const storage = multer.diskStorage({
-   destination : (req,file,cb)=>{
-    cb(null,"uploads/");
-   },
-   filename: (req,file,cb)=>{
-    cb(null,randomString(4)+'__'+file.originalname);
-   }
-})
-
-const fileFilter=(req,file,cb)=>{
-  if(file.mimetype ==='image/jpeg' || file.mimetype === 'image/jpg'){
-    cb(null,true);
-  }
-  else{
-    cb(null,false);
-  }
-}
-const multerOptions={
-  storage
-    ,fileFilter
-};
+// // const fileFilter=(req,file,cb)=>{
+// //   if(file.mimetype ==='image/jpeg' || file.mimetype === 'image/jpg'){
+// //     cb(null,true);
+// //   }
+// //   else{
+// //     cb(null,false);
+// //   }
+// // }
+// const multerOptions={
+//   storage
+//     // ,fileFilter
+// };
 
    
-  app.use(express.urlencoded());
-  app.use(multer(multerOptions).single('imageURL'));
+  app.use(express.urlencoded({ extended: true }));
+  // app.use(multer(multerOptions).single('imageURL'));
+  // app.post("/upload",upload.single('imageURL'),(req, res)=>{
+  //   res.json({url:req.file.path});
+  // })
+  app.use(express.json());
   app.use(express.static(path.join(rootDir,'public')));
   app.use('/uploads',express.static(path.join(rootDir,'uploads')));
   app.use('/host/uploads',express.static(path.join(rootDir,'uploads')));
@@ -86,8 +87,9 @@ const multerOptions={
   
  
   app.use((req, res, next) =>{
-    req.isLoggedIn = req.session.isLoggedIn
+    req.isLoggedIn = req.session.isLoggedIn || false
     console.log(req.isLoggedIn);
+  
     next();
    });
 
@@ -116,7 +118,7 @@ const multerOptions={
   
 
 // const PORT = 3006;
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3006;
 
 app.listen(PORT, ()=>{
   console.log(`Server is running on http://localhost:${PORT}`)
