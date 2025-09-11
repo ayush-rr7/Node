@@ -32,7 +32,6 @@ exports.getEditHome = (req, res, next) => {
       home: home,
       isLoggedIn:req.isLoggedIn, 
       user:req.session.user,
-
       // pageTitle: "Edit your Home",
       // currentPage: "host-homes",
       editing: editing,
@@ -52,16 +51,12 @@ exports.getHostHomes = (req, res, next) => {
   });
 };
 
-
-
-
 exports.postAddHome = (req, res, next) => {
   const { name, price, city, description } =req.body;
   console.log(req.body);
-  // upload.single("imageUrl")
-  // if(!req.file){
-  //   return res.status(422).send("no image provided");
-  // }
+  if(!req.file){
+    return res.status(422).send("no image provided");
+  }
   const usersId= req.session.user._id;
   const imageURL = req.file.path;
   console.log(imageURL);
@@ -75,7 +70,6 @@ exports.postAddHome = (req, res, next) => {
     usersId
   });
   console.log(home);
-  //  Home.find().then((registeredHomes) => {
 
   home.save().then(() => {
     console.log("Home Saved successfully");
